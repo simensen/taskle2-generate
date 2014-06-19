@@ -1,8 +1,9 @@
 <?php
 namespace Taskle\Generate;
 
-use Silex\Application;
 use Cilex\Provider\Console\ConsoleServiceProvider;
+use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
 
 class Bootstrap
 {
@@ -13,5 +14,11 @@ class Bootstrap
 
         $consoleServiceProvider = new ConsoleServiceProvider;
         $consoleServiceProvider->register($app);
+
+        $app->register(new TwigServiceProvider());
+        $app['twig'] = $app->extend('twig', function ($twig, $app) {
+            // $twig->addExtension(new BootstrapFormExtension());
+            return $twig;
+        });
     }
 }
