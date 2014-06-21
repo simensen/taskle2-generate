@@ -8,12 +8,14 @@ use Twig_Environment;
 class Model
 {
     protected $twig;
-    protected $buildDir;
+    protected $sourceDir;
+    protected $testsDir;
 
-    public function __construct(Twig_Environment $twig, $buildDir)
+    public function __construct(Twig_Environment $twig, $sourceDir, $testsDir)
     {
         $this->twig = $twig;
-        $this->buildDir = $buildDir;
+        $this->sourceDir = $sourceDir;
+        $this->testsDir = $testsDir;
     }
 
     public function build(Array $model)
@@ -125,7 +127,7 @@ class Model
     {
         echo $model['namespace'] . '\\' . $classname . "\n";
         $filename =
-            $this->buildDir . '/' .
+            $this->sourceDir . '/' .
             str_replace('\\', '/', $model['namespace']) . '/' .
             $classname . '.php';
 

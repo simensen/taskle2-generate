@@ -25,12 +25,13 @@ class Build extends AbstractCommand
 
         $config = $this->getConfig();
 
-        $buildDir = realpath($this->cwd . $config['path']);
+        $sourceDir = realpath($this->cwd . $config['source']);
+        $testsDir = realpath($this->cwd . $config['tests']);
 
         // $output->writeln(print_r($this->config,true));
 
         if (isset($config['models']) && is_array($config['models'])) {
-            $renderer = new Renderer\Model($this->container['twig'], $buildDir);
+            $renderer = new Renderer\Model($this->container['twig'], $sourceDir, $testsDir);
             foreach ($config['models'] as $singular => $model) {
                 if (!isset($model['singular'])) {
                     $model['singular'] = $singular;

@@ -15,8 +15,8 @@ class {{ entity.classname }} implements Entity
         $this->set{{ field.name | StudlyCase }}({{ field | variable }});
 {% endfor %}
     }
-
 {% for field in fields %}
+
     protected function set{{ field.name | StudlyCase }}({{ field | parameter}})
     {
         {{ field | property }} = {{ field | variable }};
@@ -26,25 +26,24 @@ class {{ entity.classname }} implements Entity
     {
         return {{ field | property }};
     }
-
 {% if field.type == 'valueobject' %}
+
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
         return {{ field | property }}->sameValueAs($other->getId());
     }
-
 {% elseif field.type == 'string' %}
+
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
         return (0 == strcmp({{ field | property }}, $other->get{{ field.name | StudlyCase }}()));
     }
-
 {% else %}
+
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
         return ({{ field | property }} === $other);
     }
-
 {% endif %}
 {% endfor %}
 }
