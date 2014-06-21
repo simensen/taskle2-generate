@@ -27,7 +27,6 @@ class Model
         $this->buildObject($model['filter']['classname'], 'ModelFilter.twig', $model);
         $this->buildObject($model['repository']['classname'], 'ModelRepository.twig', $model);
         $this->buildObject('Memory' . $model['repository']['classname'], 'MemoryModelRepository.twig', $model);
-        // die(print_r($model, true));
         foreach ($model['valueobjects'] as $classname) {
             $this->buildObject(
                 $classname,
@@ -125,7 +124,6 @@ class Model
 
     protected function buildObject($classname, $view, $model)
     {
-        echo $model['namespace'] . '\\' . $classname . "\n";
         $filename =
             $this->sourceDir . '/' .
             str_replace('\\', '/', $model['namespace']) . '/' .
@@ -135,6 +133,8 @@ class Model
             // Don't overwrite files
             return true;
         }
+
+        echo $filename . "\n";
 
         if (!file_exists(dirname($filename))) {
             mkdir(dirname($filename), 0777, $recursive = true);

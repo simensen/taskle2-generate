@@ -8,15 +8,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Taskle\Generate\Renderer;
 
-class Build extends AbstractCommand
+class Domain extends AbstractCommand
 {
     public function configure()
     {
         parent::configure();
 
-        $this->setName('build')
-             ->setDescription('Build objects from config definition')
-             ->setHelp("The <info>build</info> command creates new domain objects from generator.yml config file.\n\n<info>generate build</info>\n");
+        $this->setName('domain')
+             ->setDescription('Generate domain objects from config definition')
+             ->setHelp("The <info>domain</info> command creates new domain objects from generator.yml config file.\n\n<info>generate domain</info>\n");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
