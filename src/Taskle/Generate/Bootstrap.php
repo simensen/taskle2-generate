@@ -26,6 +26,8 @@ class Bootstrap
         $app['twig'] = $app->extend('twig', function ($twig, $app) {
             $twig->addExtension(new CaseExtension());
             $twig->addExtension(new ParameterizeExtension());
+            $twig->addGlobal('appName', $app['console']->getName());
+            $twig->addGlobal('appVersion', $app['console']->getVersion());
             return $twig;
         });
 

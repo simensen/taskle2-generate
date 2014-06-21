@@ -31,6 +31,8 @@ abstract class AbstractCommand extends Command implements PimpleAwareInterface
 
     public function bootstrap(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln($this->container['console']->getLongVersion());
+
         if (!$this->getConfig()) {
             $this->loadConfig($input, $output);
         }
