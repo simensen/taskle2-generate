@@ -1,0 +1,201 @@
+<?php
+namespace {{ namespace }};
+
+class {{ collection.classname }}Test extends \PHPUnit_Framework_TestCase
+{
+    protected function create{{ entity.classname }}Mock($sameIdAs = null)
+    {
+        {{ entity | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ entity.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        if (!is_null($sameIdAs)) {
+            {{ entity | variable }}
+                ->expects($this->once())
+                ->method('sameIdAs')
+                ->will($this->returnValue($sameIdAs));
+        }
+
+        return {{ entity | variable }};
+    }
+
+    public function testEmptyCount()
+    {
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        $this->assertEquals(
+            0,
+            count({{ collection | variable }})
+        );
+    }
+
+    public function testEmptySeek()
+    {
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        $this->setExpectedException('OutOfBoundsException');
+
+        {{ collection | variable }}->seek(0);
+    }
+
+    public function testEmptyValid()
+    {
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        $this->assertFalse({{ collection | variable }}->valid());
+    }
+
+    public function testSingleCount()
+    {
+        {{ entity | variable }} = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }});
+
+        $this->assertEquals(
+            1,
+            count({{ collection | variable }})
+        );
+    }
+
+    public function testSingleSeek()
+    {
+        {{ entity | variable }} = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }});
+
+        {{ collection | variable }}->seek(0);
+
+        $this->assertTrue({{ collection | variable }}->valid());
+
+        $this->assertEquals(
+            0,
+            {{ collection | variable }}->key()
+        );
+    }
+
+    public function testSingleCurrent()
+    {
+        {{ entity | variable }} = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }});
+
+        $this->assertSame(
+            {{ entity | variable }},
+            {{ collection | variable }}->current()
+        );
+    }
+
+    public function testDoubleCount()
+    {
+        {{ entity | variable }}1 = $this->create{{ entity.classname }}Mock();
+        {{ entity | variable }}2 = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}1);
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}2);
+
+        $this->assertEquals(
+            2,
+            count({{ collection | variable }})
+        );
+    }
+
+    public function testDoubleSeek()
+    {
+        {{ entity | variable }}1 = $this->create{{ entity.classname }}Mock();
+        {{ entity | variable }}2 = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}1);
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}2);
+
+        {{ collection | variable }}->seek(1);
+
+        $this->assertTrue({{ collection | variable }}->valid());
+
+        $this->assertEquals(
+            1,
+            {{ collection | variable }}->key()
+        );
+    }
+
+    public function testNext()
+    {
+        {{ entity | variable }}1 = $this->create{{ entity.classname }}Mock();
+        {{ entity | variable }}2 = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}1);
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}2);
+
+        {{ collection | variable }}->next();
+
+        $this->assertTrue({{ collection | variable }}->valid());
+
+        $this->assertEquals(
+            1,
+            {{ collection | variable }}->key()
+        );
+    }
+
+    public function testRewind()
+    {
+        {{ entity | variable }}1 = $this->create{{ entity.classname }}Mock();
+        {{ entity | variable }}2 = $this->create{{ entity.classname }}Mock();
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}1);
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}2);
+
+        {{ collection | variable }}->next();
+
+        $this->assertTrue({{ collection | variable }}->valid());
+
+        $this->assertEquals(
+            1,
+            {{ collection | variable }}->key()
+        );
+
+        {{ collection | variable }}->rewind();
+
+        $this->assertEquals(
+            0,
+            {{ collection | variable }}->key()
+        );
+    }
+
+    public function testRemove()
+    {
+        {{ entity | variable }}1 = $this->create{{ entity.classname }}Mock(true);
+        {{ entity | variable }}2 = $this->create{{ entity.classname }}Mock(false);
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}1);
+        {{ collection | variable }}->add{{ entity.classname }}({{ entity | variable }}2);
+        {{ collection | variable }}->remove{{ entity.classname }}({{ entity | variable }}1);
+
+        $this->assertTrue({{ collection | variable }}->valid());
+
+        $this->assertEquals(
+            0,
+            {{ collection | variable }}->key()
+        );
+
+        $this->assertSame(
+            {{ entity | variable }}2,
+            {{ collection | variable }}->current()
+        );
+    }
+}

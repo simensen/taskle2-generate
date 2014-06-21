@@ -35,13 +35,13 @@ class {{ entity.classname }} implements Entity
 
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
-        return {{ field | property }}->sameValueAs($other->getId());
+        return {{ field | property }}->sameValueAs($other->get{{ field.name | StudlyCase }}());
     }
 {% elseif field.type == 'foreign' %}
 
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
-        return {{ field | property }}->sameValueAs($other->getId());
+        return {{ field | property }}->sameValueAs($other->get{{ field.name | StudlyCase }}());
     }
 {% elseif field.type == 'string' %}
 

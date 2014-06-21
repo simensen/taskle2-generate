@@ -2,6 +2,11 @@
 namespace {{ namespace }};
 
 use Pinpoint\Shared\IdentityGenerator;
+{% for field in fields %}
+{% if field.use %}
+use {{ field.use }};
+{% endif %}
+{% endfor %}
 
 class {{ factory.classname }}
 {

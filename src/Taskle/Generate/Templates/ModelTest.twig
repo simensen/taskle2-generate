@@ -1,0 +1,34 @@
+<?php
+namespace {{ namespace }};
+
+{% for field in fields %}
+{% if field.use %}
+use {{ field.use }};
+{% endif %}
+{% endfor %}
+
+class {{ entity.classname }}Test extends \PHPUnit_Framework_TestCase
+{
+    public function testSameIdAsSuccess()
+    {
+        {{ replay() }}
+        {{ entity | variable }}One = new {{ entity.classname }}({{ fields | samples }});
+        {{ replay() }}
+        {{ entity | variable }}Two = new {{ entity.classname }}({{ fields | samples }});
+
+{% for field in fields %}
+        $this->assertTrue({{ entity | variable }}One->same{{ field.name | StudlyCase }}As({{ entity | variable }}Two));
+{% endfor %}
+    }
+
+    public function testSameIdAsFailure()
+    {
+        {{ replay() }}
+        {{ entity | variable }}One = new {{ entity.classname }}({{ fields | samples }});
+        {{ entity | variable }}Two = new {{ entity.classname }}({{ fields | samples }});
+
+{% for field in fields %}
+        $this->assertFalse({{ entity | variable }}One->same{{ field.name | StudlyCase }}As({{ entity | variable }}Two));
+{% endfor %}
+    }
+}

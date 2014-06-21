@@ -5,12 +5,12 @@ use Pinpoint\Shared\EntityCollection;
 
 class {{ collection.classname }} extends EntityCollection
 {
-    public function add{{ singular | StudlyCase }}({{ entity | parameter }})
+    public function add{{ entity.classname }}({{ entity | parameter }})
     {
         $this->addEntity({{ entity | variable }});
     }
 
-    public function remove{{ singular | StudlyCase }}({{ entity | parameter }})
+    public function remove{{ entity.classname }}({{ entity | parameter }})
     {
         $this->removeEntity({{ entity | variable }});
     }

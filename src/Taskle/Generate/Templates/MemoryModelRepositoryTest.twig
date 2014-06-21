@@ -1,0 +1,224 @@
+<?php
+namespace {{ namespace }};
+
+use Pinpoint\Shared\Entity;
+{% for field in fields %}
+{% if field.use %}
+use {{ field.use }};
+{% endif %}
+{% endfor %}
+
+class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
+{
+    public function testGetEmpty{{ plural | StudlyCase }}()
+    {
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('seek')
+            ->will($this->throwException(new \OutOfBoundsException));
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ filter | variable }} = new {{ filter.classname }}();
+
+        $this->assertCount(
+            0,
+            {{ repository | variable }}->get{{ plural | StudlyCase }}({{ filter | variable }})
+        );
+    }
+
+    public function testGet{{ plural | StudlyCase }}()
+    {
+        {{ replay() }}
+        {{ entity | variable }} = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('seek');
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('valid')
+            ->will($this->onConsecutiveCalls(true, false));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('current')
+            ->will($this->returnValue({{ entity | variable }}));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('next');
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ filter | variable }} = new {{ filter.classname }}();
+        {{ filter | variable }}->setCurrentPage(1);
+        {{ filter | variable }}->setItemsPerPage(10);
+
+        $this->assertCount(
+            1,
+            {{ repository | variable }}->get{{ plural | StudlyCase }}({{ filter | variable }})
+        );
+    }
+
+    public function test{{ entity.classname }}Count()
+    {
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(0));
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ filter | variable }} = new {{ filter.classname }}();
+
+        $this->assertEquals(
+            0,
+            {{ repository | variable }}->get{{ entity.classname }}Count({{ filter | variable }})
+        );
+    }
+
+    public function testGet{{ entity.classname }}ById()
+    {
+        {{ replay() }}
+        {{ entity | variable }}0 = new {{ entity.classname }}({{ fields | samples }});
+        {{ entity | variable }}1 = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('valid')
+            ->will($this->onConsecutiveCalls(true, true));
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('current')
+            ->will($this->onConsecutiveCalls({{ entity | variable }}0, {{ entity | variable }}1));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('next');
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ replay() }}{{ advance(fields) }}
+
+        $this->assertSame(
+            {{ entity | variable }}1,
+            {{ repository | variable }}->get{{ entity.classname }}ById({{ fields.id | sample }})
+        );
+    }
+
+    public function testGet{{ entity.classname }}ByIdNotFound()
+    {
+        {{ replay() }}
+        {{ entity | variable }}0 = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('valid')
+            ->will($this->onConsecutiveCalls(true, false));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('current')
+            ->will($this->returnValue({{ entity | variable }}0));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('next');
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        $this->assertFalse(
+            {{ repository | variable }}->get{{ entity.classname }}ById({{ fields.id | sample }})
+        );
+    }
+
+    public function testSave{{ entity.classname }}()
+    {
+        {{ replay() }}
+        {{ entity | variable }} = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('remove{{ entity.classname }}')
+            ->with($this->equalTo({{ entity | variable }}));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('add{{ entity.classname }}')
+            ->with($this->equalTo({{ entity | variable }}));
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ repository | variable }}->save{{ entity.classname }}({{ entity | variable }});
+    }
+
+    public function testDelete{{ entity.classname }}ById()
+    {
+        {{ replay() }}
+        {{ entity | variable }}0 = new {{ entity.classname }}({{ fields | samples }});
+        {{ entity | variable }}1 = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->exactly(3))
+            ->method('valid')
+            ->will($this->onConsecutiveCalls(true, true));
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('current')
+            ->will($this->onConsecutiveCalls({{ entity | variable }}0, {{ entity | variable }}1));
+
+        {{ collection | variable }}
+            ->expects($this->exactly(2))
+            ->method('next');
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('remove{{ entity.classname }}')
+            ->with($this->equalTo({{ entity | variable }}1));
+
+        {{ replay() }}{{ advance(fields) }}
+
+        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+
+        {{ repository | variable }}->delete{{ entity.classname }}ById({{ fields.id | sample }});
+    }
+}

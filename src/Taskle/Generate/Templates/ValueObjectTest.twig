@@ -1,0 +1,78 @@
+<?php
+namespace {{ namespace }};
+
+class {{ classname }}Test extends \PHPUnit_Framework_TestCase
+{
+    public function testAssign()
+    {
+        $valueObject = new {{ classname }}('value-000');
+
+        $this->assertEquals(
+            'value-000',
+            $valueObject->getValue()
+        );
+    }
+
+    public function testSameValueAsSuccess()
+    {
+        $valueObject1 = new {{ classname }}('value-000');
+        $valueObject2 = new {{ classname }}('value-000');
+
+        $this->assertTrue(
+            $valueObject1->sameValueAs($valueObject2)
+        );
+    }
+
+    public function testSameInstanceAsSuccess()
+    {
+        $valueObject1 = new {{ classname }}('value-000');
+
+        $this->assertTrue(
+            $valueObject1->sameValueAs($valueObject1)
+        );
+    }
+
+    public function testDifferentValueAsFailure()
+    {
+        $valueObject1 = new {{ classname }}('value-000');
+        $valueObject2 = new {{ classname }}('value-001');
+
+        $this->assertFalse(
+            $valueObject1->sameValueAs($valueObject2)
+        );
+    }
+
+    public function testNullValueAsFailure()
+    {
+        $valueObject1 = new {{ classname }}('value-000');
+
+        $this->assertFalse(
+            $valueObject1->sameValueAs(null)
+        );
+    }
+
+    public function testOtherClassValueAsFailure()
+    {
+        $valueObject1 = new {{ classname }}('value-000');
+        $valueObject2 = new \StdClass();
+
+        $this->assertFalse(
+            $valueObject1->sameValueAs($valueObject2)
+        );
+    }
+
+    public function testCopySuccess()
+    {
+        $valueObject = new {{ classname }}('value-000');
+        $valueObjectCopy = $valueObject->copy();
+
+        $this->assertEquals(
+            'value-000',
+            $valueObject->getValue()
+        );
+
+        $this->assertTrue(
+            $valueObject->sameValueAs($valueObjectCopy)
+        );
+    }
+}

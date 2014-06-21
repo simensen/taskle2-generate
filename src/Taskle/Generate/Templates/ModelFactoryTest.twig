@@ -1,0 +1,45 @@
+<?php
+namespace {{ namespace }};
+
+{% for field in fields %}
+{% if field.use %}
+use {{ field.use }};
+{% endif %}
+{% endfor %}
+
+class {{ factory.classname }}Test extends \PHPUnit_Framework_TestCase
+{
+    public function testCreate()
+    {
+        {{ replay() }}
+
+        $identityGenerator = $this
+            ->getMockBuilder('Pinpoint\\Shared\\IdentityGenerator')
+            ->getMock();
+
+        $identityGenerator
+            ->expects($this->once())
+            ->method('generateId')
+            ->will($this->returnValue('mock-generated-id'));
+
+        $factory = new {{ factory.classname }}($identityGenerator);
+
+        {{ entity | variable }} = $factory->create({{ samples(fields, 'id') }});
+
+        {{ replay() }}
+
+{% for field in fields %}
+{% if field.name != 'id' %}
+        $this->assertEquals(
+            {{ field | sample }},
+            {{ entity | variable }}->get{{ field.name | StudlyCase }}()
+        );
+{% endif %}
+{% endfor %}
+
+        $this->assertEquals(
+            'mock-generated-id',
+            {{ entity | variable }}->getId()->getValue()
+        );
+    }
+}

@@ -29,11 +29,10 @@ class Model
         $this->buildObject($this->sourceDir, $model['repository']['classname'], 'ModelRepository.twig', $model);
         $this->buildObject($this->sourceDir, 'Memory' . $model['repository']['classname'], 'MemoryModelRepository.twig', $model);
 
-        //$this->buildObject($this->testsDir, $model['entity']['classname'] . 'Test', 'ModelTest.twig', $model);
-        //$this->buildObject($this->testsDir, $model['collection']['classname'] . 'Test', 'ModelCollectionTest.twig', $model);
-        //$this->buildObject($this->testsDir, $model['factory']['classname'] . 'Test', 'ModelFactoryTest.twig', $model);
-        //$this->buildObject($this->testsDir, $model['repository']['classname'] . 'Test', 'ModelRepositoryTest.twig', $model);
-        //$this->buildObject($this->testsDir, 'Memory' . $model['repository']['classname'] . 'Test', 'MemoryModelRepositoryTest.twig', $model);
+        $this->buildObject($this->testsDir, $model['entity']['classname'] . 'Test', 'ModelTest.twig', $model);
+        $this->buildObject($this->testsDir, $model['collection']['classname'] . 'Test', 'ModelCollectionTest.twig', $model);
+        $this->buildObject($this->testsDir, $model['factory']['classname'] . 'Test', 'ModelFactoryTest.twig', $model);
+        $this->buildObject($this->testsDir, 'Memory' . $model['repository']['classname'] . 'Test', 'MemoryModelRepositoryTest.twig', $model);
 
         foreach ($model['valueobjects'] as $classname) {
             $this->buildObject(
@@ -46,7 +45,6 @@ class Model
                 )
             );
 
-            /*
             $this->buildObject(
                 $this->testsDir,
                 $classname . 'Test',
@@ -56,7 +54,6 @@ class Model
                     'classname' => $classname,
                 )
             );
-            */
         }
     }
 
@@ -119,8 +116,6 @@ class Model
             $type = strtolower($value['type']);
             switch ($type) {
                 case 'bool':
-                case 'double':
-                case 'float':
                 case 'int':
                 case 'string':
                     // valid type
