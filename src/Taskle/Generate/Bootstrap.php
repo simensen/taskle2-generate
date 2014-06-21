@@ -5,7 +5,8 @@ use Cilex\Provider\Console\ConsoleServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\Console\Command\Command;
-use Taskle\Generator\Pimple\PimpleAwareInterface;
+use Taskle\Generate\Command\Build;
+use Taskle\Generate\Pimple\PimpleAwareInterface;
 
 class Bootstrap
 {
@@ -24,7 +25,7 @@ class Bootstrap
         });
 
         $commands = array(
-            new Command\CreateAction(),
+            new Build(),
         );
 
         foreach ($commands as $command) {

@@ -1,14 +1,17 @@
 <?php
-namespace Taskle\Generator\Command;
+namespace Taskle\Generate\Command;
 
-use Symfony\Component\Config\FileLocator,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Helper\DialogHelper,
-    Symfony\Component\Console\Helper\FormatterHelper,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Output\OutputInterface,
-    Taskle\Generator\Pimple\PimpleAwareInterface;
+use Pimple\Container;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Taskle\Generate\Pimple\PimpleAwareInterface;
 
 /**
  * Abstract command, contains bootstrapping info

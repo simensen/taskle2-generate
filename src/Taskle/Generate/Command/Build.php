@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Build extends AbstractCommand
 {
-    public static function configure(Application $app)
+    public function configure()
     {
         parent::configure();
 
