@@ -1,0 +1,67 @@
+<?php
+namespace {{ namespace }};
+
+class Memory{{ repository.classname }} implements {{ repository.classname }}
+{
+    protected {{ collection | variable }};
+
+    public function __construct({{ collection | parameter }})
+    {
+        {{ collection | property }} = {{ collection | variable }};
+    }
+
+    public function get{{ plural | StudlyCase }}({{ filter | parameter }})
+    {
+        $limit = {{ filter | variable }}->getItemsPerPage();
+        $offset = ({{ filter | variable }}->getCurrentPage() - 1) * $limit;
+
+        {{ collection | variable }} = new {{ collection.classname }}();
+
+        try {
+            {{ collection | property }}->seek($offset);
+        } catch (\OutOfBoundsException $e) {
+            return {{ collection | variable }};
+        }
+
+        for ($i = 0; $i < $limit; $i++) {
+            if ({{ collection | property }}->valid()) {
+                {{ collection | variable }}->add{{ singular | StudlyCase }}({{ collection | property }}->current());
+                {{ collection | property }}->next();
+            } else {
+                break;
+            }
+        }
+
+        return {{ collection | variable }};
+    }
+
+    public function get{{ singular | StudlyCase }}Count({{ filter | parameter }})
+    {
+        return count({{ collection | property }});
+    }
+
+    public function get{{ singular | StudlyCase }}ById({{ identity | parameter }})
+    {
+        foreach ({{ collection | property }} as {{ entity | variable }}) {
+            if ({{ entity | variable }}->getId()->sameValueAs({{ identity | variable }})) {
+                return {{ entity | variable }};
+            }
+        }
+        return false;
+    }
+
+    public function save{{ singular | StudlyCase }}({{ entity | parameter }})
+    {
+        {{ collection | property }}->remove{{ singular | StudlyCase }}({{ entity | variable }});
+        {{ collection | property }}->add{{ singular | StudlyCase }}({{ entity | variable }});
+    }
+
+    public function delete{{ singular | StudlyCase }}ById({{ identity | parameter }})
+    {
+        foreach ({{ collection | property }} as {{ entity | variable }}) {
+            if ({{ entity | variable }}->getId()->sameValueAs({{ identity | variable }})) {
+                {{ collection | property }}->remove{{ singular | StudlyCase }}({{ entity | variable }});
+            }
+        }
+    }
+}

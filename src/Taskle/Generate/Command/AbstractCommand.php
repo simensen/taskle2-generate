@@ -22,6 +22,7 @@ abstract class AbstractCommand extends Command implements PimpleAwareInterface
 {
     protected $config;
     protected $container;
+    protected $cwd;
 
     protected function configure()
     {
@@ -81,14 +82,14 @@ abstract class AbstractCommand extends Command implements PimpleAwareInterface
             $configFile = 'generator.yml';
         }
 
-        $cwd = getcwd();
+        $this->cwd = getcwd();
 
         $locator = new FileLocator(array(
-            $cwd . DIRECTORY_SEPARATOR
+            $this->cwd . DIRECTORY_SEPARATOR
         ));
 
         // Locate() throws an exception if the file does not exist
-        return $locator->locate($configFile, $cwd, $first = true);
+        return $locator->locate($configFile, $this->cwd, $first = true);
     }
 
     protected function loadConfig(InputInterface $input, OutputInterface $output)

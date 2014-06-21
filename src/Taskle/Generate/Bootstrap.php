@@ -7,6 +7,8 @@ use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\Console\Command\Command;
 use Taskle\Generate\Command\Build;
 use Taskle\Generate\Pimple\PimpleAwareInterface;
+use Taskle\Generate\Twig\CaseExtension;
+use Taskle\Generate\Twig\ParameterizeExtension;
 
 class Bootstrap
 {
@@ -18,9 +20,12 @@ class Bootstrap
         $consoleServiceProvider = new ConsoleServiceProvider;
         $consoleServiceProvider->register($app);
 
-        $app->register(new TwigServiceProvider());
+        $app->register(new TwigServiceProvider(), array(
+            'twig.path' => __DIR__ . '/Templates',
+        ));
         $app['twig'] = $app->extend('twig', function ($twig, $app) {
-            // $twig->addExtension(new BootstrapFormExtension());
+            $twig->addExtension(new CaseExtension());
+            $twig->addExtension(new ParameterizeExtension());
             return $twig;
         });
 

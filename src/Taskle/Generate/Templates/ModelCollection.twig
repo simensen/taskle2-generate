@@ -1,0 +1,17 @@
+<?php
+namespace {{ namespace }};
+
+use Pinpoint\Shared\EntityCollection;
+
+class {{ collection.classname }} extends EntityCollection
+{
+    public function add{{ singular | StudlyCase }}({{ entity | parameter }})
+    {
+        $this->addEntity({{ entity | variable }});
+    }
+
+    public function remove{{ singular | StudlyCase }}({{ entity | parameter }})
+    {
+        $this->removeEntity({{ entity | variable }});
+    }
+}

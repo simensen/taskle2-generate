@@ -1,10 +1,12 @@
 <?php
 namespace Taskle\Generate\Command;
 
+use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Taskle\Generate\Renderer;
 
 class Build extends AbstractCommand
 {
@@ -23,6 +25,22 @@ class Build extends AbstractCommand
 
         $config = $this->getConfig();
 
-        $output->writeln(print_r($this->config,true));
+        $buildDir = realpath($this->cwd . $config['path']);
+
+        // $output->writeln(print_r($this->config,true));
+
+        if (isset($config['models']) && is_array($config['models'])) {
+            $renderer = new Renderer\Model($this->container['twig'], $buildDir);
+            foreach ($config['models'] as $singular => $model) {
+                if (!isset($model['singular'])) {
+                    $model['singular'] = $singular;
+                }
+                try {
+                    $renderer->build($model);
+                } catch (Exception $e) {
+                    $output->writeln("<info>Exception</info> " . $e->getMessage());
+                }
+            }
+        }
     }
 }

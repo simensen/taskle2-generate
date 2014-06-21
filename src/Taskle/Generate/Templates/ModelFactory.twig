@@ -1,0 +1,23 @@
+<?php
+namespace {{ namespace }};
+
+use Pinpoint\Shared\IdentityGenerator;
+
+class {{ factory.classname }}
+{
+    protected $identityGenerator;
+
+    public function __construct(IdentityGenerator $identityGenerator)
+    {
+        $this->identityGenerator = $identityGenerator;
+    }
+
+    public function create({{ parameterize(fields, 'id') }})
+    {
+        $idValue = $this->identityGenerator->generateId();
+
+        $id = new {{ identity.classname }}($idValue);
+
+        return new {{ entity.classname }}({{ fields | arguments }});
+    }
+}
