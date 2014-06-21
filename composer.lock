@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1b303ace6d9b8b731dd3cdc2a6ed444d",
+    "hash": "97458a4456884c1227458225d17bab02",
     "packages": [
         {
             "name": "cilex/console-service-provider",
@@ -108,6 +108,61 @@
                 "dependency injection"
             ],
             "time": "2014-05-01 10:34:00"
+        },
+        {
+            "name": "pinpoint-software/shared",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pinpoint-software/pinpoint-shared.git",
+                "reference": "abd6d31222042d7764202b59fd22c5365d79af41"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pinpoint-software/pinpoint-shared/zipball/abd6d31222042d7764202b59fd22c5365d79af41",
+                "reference": "abd6d31222042d7764202b59fd22c5365d79af41",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "covex-nn/phpcb": "1.0.*",
+                "pdepend/pdepend": "1.1.*",
+                "phploc/phploc": "2.0.*",
+                "phpmd/phpmd": "1.5.*",
+                "phpunit/php-invoker": "1.1.*",
+                "phpunit/phpunit": "3.7.*",
+                "sebastian/phpcpd": "1.4.*",
+                "squizlabs/php_codesniffer": "1.4.*",
+                "theseer/phpdox": "0.6.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pinpoint\\Shared\\": "src/Pinpoint/Shared/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Shell",
+                    "email": "andrew@andrewshell.org"
+                }
+            ],
+            "description": "Shared interfaces and classes",
+            "support": {
+                "source": "https://github.com/pinpoint-software/pinpoint-shared/tree/master",
+                "issues": "https://github.com/pinpoint-software/pinpoint-shared/issues"
+            },
+            "time": "2014-06-20 19:46:54"
         },
         {
             "name": "psr/log",
@@ -1061,6 +1116,7 @@
     "stability-flags": {
         "cilex/console-service-provider": 20,
         "pimple/pimple": 20,
+        "pinpoint-software/shared": 20,
         "silex/silex": 20
     },
     "platform": {
