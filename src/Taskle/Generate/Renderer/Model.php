@@ -21,14 +21,23 @@ class Model
     public function build(Array $model)
     {
         $model = $this->validateModel($model);
-        $this->buildObject($model['entity']['classname'], 'Model.twig', $model);
-        $this->buildObject($model['collection']['classname'], 'ModelCollection.twig', $model);
-        $this->buildObject($model['factory']['classname'], 'ModelFactory.twig', $model);
-        $this->buildObject($model['filter']['classname'], 'ModelFilter.twig', $model);
-        $this->buildObject($model['repository']['classname'], 'ModelRepository.twig', $model);
-        $this->buildObject('Memory' . $model['repository']['classname'], 'MemoryModelRepository.twig', $model);
+
+        $this->buildObject($this->sourceDir, $model['entity']['classname'], 'Model.twig', $model);
+        $this->buildObject($this->sourceDir, $model['collection']['classname'], 'ModelCollection.twig', $model);
+        $this->buildObject($this->sourceDir, $model['factory']['classname'], 'ModelFactory.twig', $model);
+        $this->buildObject($this->sourceDir, $model['filter']['classname'], 'ModelFilter.twig', $model);
+        $this->buildObject($this->sourceDir, $model['repository']['classname'], 'ModelRepository.twig', $model);
+        $this->buildObject($this->sourceDir, 'Memory' . $model['repository']['classname'], 'MemoryModelRepository.twig', $model);
+
+        //$this->buildObject($this->testsDir, $model['entity']['classname'] . 'Test', 'ModelTest.twig', $model);
+        //$this->buildObject($this->testsDir, $model['collection']['classname'] . 'Test', 'ModelCollectionTest.twig', $model);
+        //$this->buildObject($this->testsDir, $model['factory']['classname'] . 'Test', 'ModelFactoryTest.twig', $model);
+        //$this->buildObject($this->testsDir, $model['repository']['classname'] . 'Test', 'ModelRepositoryTest.twig', $model);
+        //$this->buildObject($this->testsDir, 'Memory' . $model['repository']['classname'] . 'Test', 'MemoryModelRepositoryTest.twig', $model);
+
         foreach ($model['valueobjects'] as $classname) {
             $this->buildObject(
+                $this->sourceDir,
                 $classname,
                 'ValueObject.twig',
                 array(
@@ -36,6 +45,18 @@ class Model
                     'classname' => $classname,
                 )
             );
+
+            /*
+            $this->buildObject(
+                $this->testsDir,
+                $classname . 'Test',
+                'ValueObjectTest.twig',
+                array(
+                    'namespace' => $model['namespace'],
+                    'classname' => $classname,
+                )
+            );
+            */
         }
     }
 
@@ -104,6 +125,17 @@ class Model
                 case 'string':
                     // valid type
                     break;
+                case 'foreign':
+                    if (empty($value['name']) || !is_string($value['name'])) {
+                        throw new Exception("Missing fields.{$key}.name value for {$singular}");
+                    }
+                    if (empty($value['classname']) || !is_string($value['classname'])) {
+                        throw new Exception("Missing fields.{$key}.classname value for {$singular}");
+                    }
+                    if (empty($value['use']) || !is_string($value['use'])) {
+                        throw new Exception("Missing fields.{$key}.use value for {$singular}");
+                    }
+                    break;
                 case 'valueobject':
                     if (empty($model['fields'][$key]['classname'])) {
                         $model['fields'][$key]['classname'] =
@@ -122,10 +154,10 @@ class Model
         return $model;
     }
 
-    protected function buildObject($classname, $view, $model)
+    protected function buildObject($buildDir, $classname, $view, $model)
     {
         $filename =
-            $this->sourceDir . '/' .
+            $buildDir . '/' .
             str_replace('\\', '/', $model['namespace']) . '/' .
             $classname . '.php';
 

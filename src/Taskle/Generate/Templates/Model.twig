@@ -2,6 +2,11 @@
 namespace {{ namespace }};
 
 use Pinpoint\Shared\Entity;
+{% for field in fields %}
+{% if field.use %}
+use {{ field.use }};
+{% endif %}
+{% endfor %}
 
 class {{ entity.classname }} implements Entity
 {
@@ -27,6 +32,12 @@ class {{ entity.classname }} implements Entity
         return {{ field | property }};
     }
 {% if field.type == 'valueobject' %}
+
+    public function same{{ field.name | StudlyCase }}As($other = null)
+    {
+        return {{ field | property }}->sameValueAs($other->getId());
+    }
+{% elseif field.type == 'foreign' %}
 
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
