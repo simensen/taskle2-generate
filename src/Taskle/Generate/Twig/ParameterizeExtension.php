@@ -112,6 +112,9 @@ class ParameterizeExtension extends \Twig_Extension
             case 'valueobject':
                 return 'new ' . $classname . "({$string})";
                 break;
+            case 'collection':
+                return 'new ' . $classname . "()";
+                break;
             default:
                 return '';
         }

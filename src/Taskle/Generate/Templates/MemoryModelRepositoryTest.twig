@@ -10,7 +10,7 @@ use {{ field.use }};
 {% endif %}
 {% endfor %}
 
-class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
+class {{ memoryRepository.classname }}Test extends \PHPUnit_Framework_TestCase
 {
     public function testGetEmpty{{ plural | StudlyCase }}()
     {
@@ -24,13 +24,13 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->method('seek')
             ->will($this->throwException(new \OutOfBoundsException));
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ retrieveRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
         {{ filter | variable }} = new {{ filter.classname }}();
 
         $this->assertCount(
             0,
-            {{ repository | variable }}->get{{ plural | StudlyCase }}({{ filter | variable }})
+            {{ retrieveRepository | variable }}->retrieve{{ plural | StudlyCase }}({{ filter | variable }})
         );
     }
 
@@ -62,7 +62,7 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('next');
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ retrieveRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
         {{ filter | variable }} = new {{ filter.classname }}();
         {{ filter | variable }}->setCurrentPage(1);
@@ -70,7 +70,7 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(
             1,
-            {{ repository | variable }}->get{{ plural | StudlyCase }}({{ filter | variable }})
+            {{ retrieveRepository | variable }}->retrieve{{ plural | StudlyCase }}({{ filter | variable }})
         );
     }
 
@@ -86,13 +86,13 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->method('count')
             ->will($this->returnValue(0));
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ retrieveRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
         {{ filter | variable }} = new {{ filter.classname }}();
 
         $this->assertEquals(
             0,
-            {{ repository | variable }}->get{{ entity.classname }}Count({{ filter | variable }})
+            {{ retrieveRepository | variable }}->retrieve{{ entity.classname }}Count({{ filter | variable }})
         );
     }
 
@@ -121,13 +121,13 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('next');
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ retrieveRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
         {{ replay() }}{{ advance(fields) }}
 
         $this->assertSame(
             {{ entity | variable }}1,
-            {{ repository | variable }}->get{{ entity.classname }}ById({{ fields.id | sample }})
+            {{ retrieveRepository | variable }}->retrieve{{ entity.classname }}ById({{ fields.id | sample }})
         );
     }
 
@@ -155,14 +155,14 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('next');
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ retrieveRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
         $this->assertFalse(
-            {{ repository | variable }}->get{{ entity.classname }}ById({{ fields.id | sample }})
+            {{ retrieveRepository | variable }}->retrieve{{ entity.classname }}ById({{ fields.id | sample }})
         );
     }
 
-    public function testSave{{ entity.classname }}()
+    public function testCreate{{ entity.classname }}()
     {
         {{ replay() }}
         {{ entity | variable }} = new {{ entity.classname }}({{ fields | samples }});
@@ -182,9 +182,34 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
             ->method('add{{ entity.classname }}')
             ->with($this->equalTo({{ entity | variable }}));
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ createRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
-        {{ repository | variable }}->save{{ entity.classname }}({{ entity | variable }});
+        {{ createRepository | variable }}->create{{ entity.classname }}({{ entity | variable }});
+    }
+
+    public function testUpdate{{ entity.classname }}()
+    {
+        {{ replay() }}
+        {{ entity | variable }} = new {{ entity.classname }}({{ fields | samples }});
+
+        {{ collection | variable }} = $this
+            ->getMockBuilder('{{ namespace }}\\{{ collection.classname }}')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('remove{{ entity.classname }}')
+            ->with($this->equalTo({{ entity | variable }}));
+
+        {{ collection | variable }}
+            ->expects($this->once())
+            ->method('add{{ entity.classname }}')
+            ->with($this->equalTo({{ entity | variable }}));
+
+        {{ updateRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
+
+        {{ updateRepository | variable }}->update{{ entity.classname }}({{ entity | variable }});
     }
 
     public function testDelete{{ entity.classname }}ById()
@@ -219,8 +244,8 @@ class Memory{{ repository.classname }}Test extends \PHPUnit_Framework_TestCase
 
         {{ replay() }}{{ advance(fields) }}
 
-        {{ repository | variable }} = new Memory{{ repository.classname }}({{ collection | variable }});
+        {{ deleteRepository | variable }} = new {{ memoryRepository.classname }}({{ collection | variable }});
 
-        {{ repository | variable }}->delete{{ entity.classname }}ById({{ fields.id | sample }});
+        {{ deleteRepository | variable }}->delete{{ entity.classname }}ById({{ fields.id | sample }});
     }
 }

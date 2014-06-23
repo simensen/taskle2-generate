@@ -3,7 +3,11 @@
 
 namespace {{ namespace }};
 
-class Memory{{ repository.classname }} implements {{ repository.classname }}
+class {{ memoryRepository.classname }} implements
+    {{ createRepository.classname }},
+    {{ retrieveRepository.classname }},
+    {{ updateRepository.classname }},
+    {{ deleteRepository.classname }}
 {
     protected {{ collection | variable }};
 
@@ -12,7 +16,13 @@ class Memory{{ repository.classname }} implements {{ repository.classname }}
         {{ collection | property }} = {{ collection | variable }};
     }
 
-    public function get{{ plural | StudlyCase }}({{ filter | parameter }})
+    public function create{{ singular | StudlyCase }}({{ entity | parameter }})
+    {
+        {{ collection | property }}->remove{{ singular | StudlyCase }}({{ entity | variable }});
+        {{ collection | property }}->add{{ singular | StudlyCase }}({{ entity | variable }});
+    }
+
+    public function retrieve{{ plural | StudlyCase }}({{ filter | parameter }})
     {
         $limit = {{ filter | variable }}->getItemsPerPage();
         $offset = ({{ filter | variable }}->getCurrentPage() - 1) * $limit;
@@ -37,12 +47,12 @@ class Memory{{ repository.classname }} implements {{ repository.classname }}
         return {{ collection | variable }};
     }
 
-    public function get{{ singular | StudlyCase }}Count({{ filter | parameter }})
+    public function retrieve{{ singular | StudlyCase }}Count({{ filter | parameter }})
     {
         return count({{ collection | property }});
     }
 
-    public function get{{ singular | StudlyCase }}ById({{ identity | parameter }})
+    public function retrieve{{ singular | StudlyCase }}ById({{ identity | parameter }})
     {
         foreach ({{ collection | property }} as {{ entity | variable }}) {
             if ({{ entity | variable }}->getId()->sameValueAs({{ identity | variable }})) {
@@ -52,7 +62,7 @@ class Memory{{ repository.classname }} implements {{ repository.classname }}
         return false;
     }
 
-    public function save{{ singular | StudlyCase }}({{ entity | parameter }})
+    public function update{{ singular | StudlyCase }}({{ entity | parameter }})
     {
         {{ collection | property }}->remove{{ singular | StudlyCase }}({{ entity | variable }});
         {{ collection | property }}->add{{ singular | StudlyCase }}({{ entity | variable }});

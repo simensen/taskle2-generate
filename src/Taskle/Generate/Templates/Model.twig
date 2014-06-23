@@ -51,6 +51,12 @@ class {{ entity.classname }} implements Entity
     {
         return (0 == strcmp({{ field | property }}, $other->get{{ field.name | StudlyCase }}()));
     }
+{% elseif field.type == 'collection' %}
+
+    public function same{{ field.name | StudlyCase }}As($other = null)
+    {
+        return {{ field | property }}->sameHashAs($other->get{{ field.name | StudlyCase }}());
+    }
 {% else %}
 
     public function same{{ field.name | StudlyCase }}As($other = null)

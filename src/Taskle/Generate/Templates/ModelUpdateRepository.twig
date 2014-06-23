@@ -1,0 +1,9 @@
+<?php
+{% include 'DocBlock.twig' %}
+
+namespace {{ namespace }};
+
+interface {{ updateRepository.classname }}
+{
+    public function update{{ singular | StudlyCase }}({{ entity | parameter }});
+}

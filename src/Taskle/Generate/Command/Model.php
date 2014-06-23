@@ -8,15 +8,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Taskle\Generate\Renderer;
 
-class Domain extends AbstractCommand
+class Model extends AbstractCommand
 {
     public function configure()
     {
         parent::configure();
 
-        $this->setName('domain')
-             ->setDescription('Generate domain objects from config definition')
-             ->setHelp("The <info>domain</info> command creates new domain objects from generator.yml config file.\n\n<info>generate domain</info>\n");
+        $this->setName('model')
+             ->setDescription('Generate domain models from config definition')
+             ->setHelp("The <info>model</info> command creates new domain models from generator.yml config file.\n\n<info>generate model</info>\n");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -29,7 +29,7 @@ class Domain extends AbstractCommand
         $testsDir = realpath($this->cwd . $config['tests']);
 
         if (isset($config['models']) && is_array($config['models'])) {
-            $renderer = new Renderer\Model($this->container['twig'], $sourceDir, $testsDir);
+            $renderer = new Renderer\Model($this->container['twig'], $sourceDir, $testsDir, $output);
             foreach ($config['models'] as $singular => $model) {
                 if (!isset($model['singular'])) {
                     $model['singular'] = $singular;

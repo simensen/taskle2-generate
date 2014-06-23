@@ -5,7 +5,7 @@ use Cilex\Provider\Console\ConsoleServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\Console\Command\Command;
-use Taskle\Generate\Command\Domain;
+use Taskle\Generate\Command\Model;
 use Taskle\Generate\Pimple\PimpleAwareInterface;
 use Taskle\Generate\Twig\CaseExtension;
 use Taskle\Generate\Twig\ParameterizeExtension;
@@ -32,7 +32,7 @@ class Bootstrap
         });
 
         $commands = array(
-            new Domain(),
+            new Model(),
         );
 
         foreach ($commands as $command) {
