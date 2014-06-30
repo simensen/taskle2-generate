@@ -30,7 +30,9 @@ class {{ entity.classname }}Test extends \PHPUnit_Framework_TestCase
         {{ entity | variable }}Two = new {{ entity.classname }}({{ fields | samples }});
 
 {% for field in fields %}
+{% if field.type != 'collection' %}
         $this->assertFalse({{ entity | variable }}One->same{{ field.name | StudlyCase }}As({{ entity | variable }}Two));
+{% endif %}
 {% endfor %}
     }
 }

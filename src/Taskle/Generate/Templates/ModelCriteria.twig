@@ -1,0 +1,15 @@
+<?php
+{% include 'DocBlock.twig' %}
+
+namespace {{ namespace }};
+
+class {{ criteria.classname }}
+{
+    public $limit;
+    public $offset;
+{% for field in fields %}
+{% if field.type == 'foreign' or field.type == 'valueobject' %}
+    public {{ field | variable }};
+{% endif %}
+{% endfor %}
+}

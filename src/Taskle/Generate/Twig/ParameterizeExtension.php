@@ -66,9 +66,9 @@ class ParameterizeExtension extends \Twig_Extension
         return implode(', ', $arguments);
     }
 
-    public function property($field)
+    public function property($field, $on = '$this')
     {
-        return '$this->' . CaseHelper::camelCase($field['name']);
+        return $on . '->' . CaseHelper::camelCase($field['name']);
     }
 
     public function variable($field)

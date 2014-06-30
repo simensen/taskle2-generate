@@ -5,7 +5,6 @@ namespace {{ namespace }};
 
 interface {{ retrieveRepository.classname }}
 {
-    public function retrieve{{ plural | StudlyCase }}({{ filter | parameter }});
-    public function retrieve{{ singular | StudlyCase }}Count({{ filter | parameter }});
-    public function retrieve{{ singular | StudlyCase }}ById({{ identity | parameter }});
+    public function retrieve{{ plural | StudlyCase }}({{ criteria | parameter }});
+    public function retrieve{{ singular | StudlyCase }}Count({{ criteria | parameter }});
 }

@@ -31,12 +31,11 @@ class Model
             'entity' => ['Model.twig', 'ModelClassExtension.twig', 'ModelTest.twig'],
             'collection' => ['ModelCollection.twig', 'ModelClassExtension.twig', 'ModelCollectionTest.twig'],
             'factory' => ['ModelFactory.twig', 'ModelClassExtension.twig', 'ModelFactoryTest.twig'],
-            'filter' => ['ModelFilter.twig', 'ModelClassExtension.twig', false],
+            'criteria' => ['ModelCriteria.twig', 'ModelClassExtension.twig', false],
             'createRepository' => ['ModelCreateRepository.twig', 'ModelInterfaceExtension.twig', false],
             'retrieveRepository' => ['ModelRetrieveRepository.twig', 'ModelInterfaceExtension.twig', false],
             'updateRepository' => ['ModelUpdateRepository.twig', 'ModelInterfaceExtension.twig', false],
             'deleteRepository' => ['ModelDeleteRepository.twig', 'ModelInterfaceExtension.twig', false],
-            'memoryRepository' => ['MemoryModelRepository.twig', 'ModelClassExtension.twig', 'MemoryModelRepositoryTest.twig'],
         );
 
         foreach ($templates as $name => list($classTemplate, $extensionTemplate, $testTemplate)) {
@@ -115,9 +114,9 @@ class Model
             'name' => $singular . '-factory',
             'classname' => CaseHelper::studlyCase($singular) . 'Factory',
         );
-        $model['filter'] = array(
-            'name' => $singular . '-filter',
-            'classname' => CaseHelper::studlyCase($singular) . 'Filter',
+        $model['criteria'] = array(
+            'name' => $singular . '-criteria',
+            'classname' => CaseHelper::studlyCase($singular) . 'Criteria',
         );
         $model['memoryRepository'] = array(
             'name' => 'memory-' . $singular . '-repository',

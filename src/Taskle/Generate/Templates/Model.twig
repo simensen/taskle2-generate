@@ -61,7 +61,7 @@ class {{ entity.classname }} implements Entity
 
     public function same{{ field.name | StudlyCase }}As($other = null)
     {
-        return ({{ field | property }} === $other);
+        return ({{ field | property }} === $other->get{{ field.name | StudlyCase }}());
     }
 {% endif %}
 {% endfor %}
