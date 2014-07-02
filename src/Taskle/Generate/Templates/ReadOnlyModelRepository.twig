@@ -3,7 +3,7 @@
 
 namespace {{ namespace }};
 
-interface {{ retrieveRepository.classname }}
+interface {{ readOnlyRepository.classname }}
 {
     public function retrieve{{ plural | StudlyCase }}({{ criteria | parameter }});
     public function retrieve{{ singular | StudlyCase }}Count({{ criteria | parameter }});

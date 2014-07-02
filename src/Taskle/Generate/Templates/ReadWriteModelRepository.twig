@@ -1,0 +1,11 @@
+<?php
+{% include 'DocBlock.twig' %}
+
+namespace {{ namespace }};
+
+interface {{ readWriteRepository.classname }} extends {{ readOnlyRepository.classname }}
+{
+    public function create{{ singular | StudlyCase }}({{ entity | parameter }});
+    public function delete{{ singular | StudlyCase }}ById({{ identity | parameter }});
+    public function update{{ singular | StudlyCase }}({{ entity | parameter }});
+}

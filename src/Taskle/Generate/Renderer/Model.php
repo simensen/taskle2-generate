@@ -32,10 +32,8 @@ class Model
             'collection' => ['ModelCollection.twig', 'ModelClassExtension.twig', 'ModelCollectionTest.twig'],
             'factory' => ['ModelFactory.twig', 'ModelClassExtension.twig', 'ModelFactoryTest.twig'],
             'criteria' => ['ModelCriteria.twig', 'ModelClassExtension.twig', false],
-            'createRepository' => ['ModelCreateRepository.twig', 'ModelInterfaceExtension.twig', false],
-            'retrieveRepository' => ['ModelRetrieveRepository.twig', 'ModelInterfaceExtension.twig', false],
-            'updateRepository' => ['ModelUpdateRepository.twig', 'ModelInterfaceExtension.twig', false],
-            'deleteRepository' => ['ModelDeleteRepository.twig', 'ModelInterfaceExtension.twig', false],
+            'readOnlyRepository' => ['ReadOnlyModelRepository.twig', 'ModelInterfaceExtension.twig', false],
+            'readWriteRepository' => ['ReadWriteModelRepository.twig', 'ModelInterfaceExtension.twig', false],
         );
 
         foreach ($templates as $name => list($classTemplate, $extensionTemplate, $testTemplate)) {
@@ -118,25 +116,13 @@ class Model
             'name' => $singular . '-criteria',
             'classname' => CaseHelper::studlyCase($singular) . 'Criteria',
         );
-        $model['memoryRepository'] = array(
-            'name' => 'memory-' . $singular . '-repository',
-            'classname' => 'Memory' . CaseHelper::studlyCase($singular) . 'Repository',
+        $model['readOnlyRepository'] = array(
+            'name' => 'read-only-' . $singular . '-repository',
+            'classname' => 'ReadOnly' . CaseHelper::studlyCase($singular) . 'Repository',
         );
-        $model['createRepository'] = array(
-            'name' => $singular . '-create-repository',
-            'classname' => 'Create' . CaseHelper::studlyCase($singular) . 'Repository',
-        );
-        $model['retrieveRepository'] = array(
-            'name' => $singular . '-retrieve-repository',
-            'classname' => 'Retrieve' . CaseHelper::studlyCase($singular) . 'Repository',
-        );
-        $model['updateRepository'] = array(
-            'name' => $singular . '-update-repository',
-            'classname' => 'Update' . CaseHelper::studlyCase($singular) . 'Repository',
-        );
-        $model['deleteRepository'] = array(
-            'name' => $singular . '-delete-repository',
-            'classname' => 'Delete' . CaseHelper::studlyCase($singular) . 'Repository',
+        $model['readWriteRepository'] = array(
+            'name' => 'read-write-' . $singular . '-repository',
+            'classname' => 'ReadWrite' . CaseHelper::studlyCase($singular) . 'Repository',
         );
         $model['identity'] = array(
             'name' => $singular . '-id',

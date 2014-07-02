@@ -1,9 +1,0 @@
-<?php
-{% include 'DocBlock.twig' %}
-
-namespace {{ namespace }};
-
-interface {{ deleteRepository.classname }}
-{
-    public function delete{{ singular | StudlyCase }}ById({{ identity | parameter }});
-}
