@@ -3,6 +3,10 @@
 
 namespace {{ namespace }};
 
+use {{ extension }}\{{ readOnlyRepository.classname }};
+use {{ extension }}\{{ entity.classname }};
+use {{ extension }}\{{ identity.classname }};
+
 interface {{ readWriteRepository.classname }} extends {{ readOnlyRepository.classname }}
 {
     public function create{{ singular | StudlyCase }}({{ entity | parameter }});

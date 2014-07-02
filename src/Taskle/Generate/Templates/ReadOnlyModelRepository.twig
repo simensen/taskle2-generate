@@ -3,6 +3,8 @@
 
 namespace {{ namespace }};
 
+use {{ extension }}\{{ criteria.classname }};
+
 interface {{ readOnlyRepository.classname }}
 {
     public function retrieve{{ plural | StudlyCase }}({{ criteria | parameter }});
